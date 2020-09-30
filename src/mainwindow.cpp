@@ -35,6 +35,7 @@ namespace
     constexpr auto HIGH_MI = HIGH_KM * MI_PER_KM;
     constexpr auto EARTH_RADIUS = 6371.0;
     const QUrl PROJECT_URL = QUrl { "https://rjhansen.github.io/galileo" };
+    const QUrl BUGS_URL = QUrl { "https://github.com/rjhansen/galileo/issues" };
 };
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow { parent },
@@ -55,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow { parent },
     connect(ui->actionAbout, &QAction::triggered, [=]() {
         (new About{ })->show();
     });
-    connect(ui->actionReport, &QAction::triggered, [=]() { QDesktopServices::openUrl(PROJECT_URL);});
+    connect(ui->actionReport, &QAction::triggered, [=]() { QDesktopServices::openUrl(BUGS_URL);});
     connect(ui->actionQuit, &QAction::triggered, [=]() { QApplication::quit(); });
     connect(ui->elevation, vc_ptr, this, &MainWindow::updateSightLines);
     connect(ui->altitude, vc_ptr, this, &MainWindow::updateSightLines);
