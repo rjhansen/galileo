@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?define Vendor="Hansen Engineering" ?>
+<?define ProductName="@PROJECT_NAME@"?>
+<?define ProductVersion="@PROJECT_VERSION@"?>
+
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+    <Product Name='$(var.ProductName)' Manufacturer='$(var.Vendor)' Id='*' UpgradeCode='c2763d2c-766d-428d-ad23-ac5f60e8a239' Language='1033' Codepage='1252' Version='$(var.ProductVersion)'>
+		<Package Id='*' Keywords='Installer' Description="$(var.ProductName) $(var.ProductVersion) Installer" Comments='Released under the ISC License' Manufacturer='$(var.Vendor)' InstallerVersion='301' Languages='1033' Compressed='yes' SummaryCodepage='1252' Platform='x64'/>
+		<MediaTemplate EmbedCab='yes' />
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+		<UIRef Id="WixUI_Minimal"/>
+		<WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+		<MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
+
+		<Directory Id='TARGETDIR' Name='SourceDir'>
+			<Directory Id='ProgramFiles64Folder'>
+				<Directory Id='VendorDir' Name='$(var.Vendor)'>
+					<Directory Id='AppDir' Name='$(var.ProductName)' />
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<Feature Id='FeatureApp' Title="$(var.ProductName) $(var.ProductVersion)" Description="The complete package">
+			<ComponentGroupRef Id="MainApp" />
+		</Feature>
+	</Product>
+</Wix>

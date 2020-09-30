@@ -1,0 +1,47 @@
+Buildroot: @CMAKE_CURRENT_BINARY_DIR@/_CPack_Packages/Linux/RPM/@CPACK_PACKAGE_FILE_NAME@
+Summary:   A simple Qt program to compute sightlines to satellites
+Name:      @PROJECT_NAME@
+Version:   @PROJECT_VERSION@
+Release:   @CPACK_PACKAGE_RELEASE@
+License:   ISC
+Group:     Development/Tools/Other
+Vendor:    @CPACK_PACKAGE_VENDOR@
+Prefix:    /usr
+Requires:  qt5 >= 5.13.0
+Url:       @CMAKE_PROJECT_HOMEPAGE_URL@
+
+%define _rpmdir %_topdir/RPMS
+%define _srcrpmdir %_topdir/SRPMS
+%define _rpmfilename galileo-1.0.0-1.x86_64.rpm
+%define _unpackaged_files_terminate_build 0
+ 
+%description
+A simple Qt program to compute sightlines to orbiting satellites
+ 
+%prep
+mv $RPM_BUILD_ROOT %_topdir/tmpBBroot
+
+%install
+if [ -e $RPM_BUILD_ROOT ];
+then
+  rm -rf $RPM_BUILD_ROOT
+fi
+mv %_topdir/tmpBBroot $RPM_BUILD_ROOT
+
+%clean
+
+%post
+
+%postun
+
+%pre
+
+%preun
+
+%files
+%defattr(-,root,root,-)
+"/usr/bin/@PROJECT_NAME@"
+
+%changelog
+* Sat Sep 30 2020 Robert J. Hansen <rob@hansen.engineering> - 1.0.0-1
+  Initial build
