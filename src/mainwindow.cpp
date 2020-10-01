@@ -54,7 +54,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow { parent },
     void (QComboBox::*cic_ptr)(int) = &QComboBox::currentIndexChanged;
 
     connect(ui->actionAbout, &QAction::triggered, [=]() {
-        (new About{ })->show();
+        About* ptr = new About {};
+        ptr->setAttribute(Qt::WA_DeleteOnClose);
+        ptr->show();
     });
     connect(ui->actionReport, &QAction::triggered, [=]() { QDesktopServices::openUrl(BUGS_URL);});
     connect(ui->actionQuit, &QAction::triggered, [=]() { QApplication::quit(); });
