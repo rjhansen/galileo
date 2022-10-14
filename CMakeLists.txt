@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15.0 FATAL_ERROR)
 
 project(Galileo VERSION 1.0.0 DESCRIPTION "A sightline calculator")
 
-find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets REQUIRED)
 
 set(SOURCECODE src/main.cpp src/mainwindow.cpp src/about.cpp src/Galileo.qrc src/mainwindow.ui src/about.ui)
 
@@ -33,7 +33,7 @@ if (MSVC)
     configure_file("template.wxs.in" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.wxs")
 endif(MSVC)
 
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
+target_link_libraries(${PROJECT_NAME} Qt6::Widgets)
 set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED true
