@@ -19,29 +19,23 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-
-if (UNIX)
+if (APPLE)
+    add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCECODE})
+elseif (UNIX)
     include(GNUInstallDirs)
     set(CPACK_RPM_USER_BINARY_SPECFILE "project.spec")
     configure_file("project.spec.in" "project.spec" @ONLY IMMEDIATE)
     add_executable(${PROJECT_NAME} ${SOURCECODE})
-endif(UNIX)
-
-if (MSVC)
+    install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+elseif (MSVC)
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
     add_executable(${PROJECT_NAME} WIN32 ${SOURCECODE})
-    configure_file("template.wxs.in" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.wxs")
-endif(MSVC)
+endif ()
 
 target_link_libraries(${PROJECT_NAME} Qt6::Widgets)
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    CXX_STANDARD 17
+    CXX_STANDARD 23
     CXX_STANDARD_REQUIRED true
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${PROJECT_NAME}-${PROJECT_VERSION}")
-
-if (UNIX)
-    install(TARGETS ${PROJECT_NAME}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-endif(UNIX)
-
+    
 include(CPack)
