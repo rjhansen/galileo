@@ -45,15 +45,23 @@ set(CMAKE_AUTORCC ON)
 # them to write unit tests involving either unit test framework.  You WILL
 # be using one or the other in production code.  If your dev box doesn't
 # have both available, that's an environment defect: fix it.
+#
+# Note: as of CMake 3.30, the way CMake interacts with Boost has been
+# upended as a result of policy CMP0167.  Until Boost and CMake start
+# playing nice again, minimize your reliance on Boost.
 
-find_package(Boost 1.80 REQUIRED COMPONENTS unit_test_framework REQUIRED)
+# find_package(Boost 1.83 REQUIRED COMPONENTS unit_test_framework REQUIRED)
+
+
 include(FetchContent)
 FetchContent_Declare(
   googletest
   URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
 )
 # For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+if (MSVC)
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+endif()
 FetchContent_MakeAvailable(googletest)
 
 add_subdirectory(gui)
@@ -62,16 +70,13 @@ add_subdirectory(sightlines)
 target_include_directories(${PROJECT_NAME} PUBLIC sightlines)
 target_link_libraries(${PROJECT_NAME} PUBLIC sightlines Qt6::Widgets)
 
-install(TARGETS sightlines FILE_SET HEADERS)
-
 # Our testing regimen begins here. 
 enable_testing()
 add_executable(sightlines_gtest tests/sightlines_gtest.cpp)
 target_link_libraries(sightlines_gtest sightlines GTest::gtest_main)
 add_test(NAME sightlines_gtest COMMAND sightlines_gtest)
 
-add_executable(sightlines_btest tests/sightlines_btest.cpp)
-target_include_directories(sightlines_btest PUBLIC ${Boost_INCLUDE_DIRS})
-target_link_libraries(sightlines_btest sightlines ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
-add_test(NAME sightlines_btest COMMAND sightlines_btest)
-
+# add_executable(sightlines_btest tests/sightlines_btest.cpp)
+# target_include_directories(sightlines_btest PUBLIC ${Boost_INCLUDE_DIRS})
+# target_link_libraries(sightlines_btest sightlines ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+# add_test(NAME sightlines_btest COMMAND sightlines_btest)

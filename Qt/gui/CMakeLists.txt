@@ -18,6 +18,7 @@ elseif (UNIX)
     add_executable(${PROJECT_NAME} ${GUI_SOURCECODE})
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 elseif (MSVC)
-    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
     add_executable(${PROJECT_NAME} WIN32 ${GUI_SOURCECODE})
+    # Don't forget: you'll probably need to run windeployqt on the executable
+    # to copy over all the DLLs you'll need.
 endif ()
