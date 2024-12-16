@@ -62,6 +62,8 @@ add_subdirectory(sightlines)
 target_include_directories(${PROJECT_NAME} PUBLIC sightlines)
 target_link_libraries(${PROJECT_NAME} PUBLIC sightlines Qt6::Widgets)
 
+install(TARGETS sightlines FILE_SET HEADERS)
+
 # Our testing regimen begins here. 
 enable_testing()
 add_executable(sightlines_gtest tests/sightlines_gtest.cpp)
@@ -72,3 +74,4 @@ add_executable(sightlines_btest tests/sightlines_btest.cpp)
 target_include_directories(sightlines_btest PUBLIC ${Boost_INCLUDE_DIRS})
 target_link_libraries(sightlines_btest sightlines ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 add_test(NAME sightlines_btest COMMAND sightlines_btest)
+
