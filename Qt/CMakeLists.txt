@@ -46,7 +46,8 @@ set(CMAKE_AUTORCC ON)
 # be using one or the other in production code.  If your dev box doesn't
 # have both available, that's an environment defect: fix it.
 
-find_package(Boost 1.80 REQUIRED COMPONENTS unit_test_framework)
+find_package(Boost 1.80 REQUIRED COMPONENTS unit_test_framework REQUIRED)
+include(FetchContent)
 FetchContent_Declare(
   googletest
   URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
@@ -61,6 +62,13 @@ add_subdirectory(sightlines)
 target_include_directories(${PROJECT_NAME} PUBLIC sightlines)
 target_link_libraries(${PROJECT_NAME} PUBLIC sightlines Qt6::Widgets)
 
+# Our testing regimen begins here. 
 enable_testing()
-add_executable(sightline_gtest tests/sightline_gtest.cc)
-target_link_libraries(sightline_gtest sightline GTest::gtest_main)
+add_executable(sightlines_gtest tests/sightlines_gtest.cpp)
+target_link_libraries(sightlines_gtest sightlines GTest::gtest_main)
+add_test(NAME sightlines_gtest COMMAND sightlines_gtest)
+
+add_executable(sightlines_btest tests/sightlines_btest.cpp)
+target_include_directories(sightlines_btest PUBLIC ${Boost_INCLUDE_DIRS})
+target_link_libraries(sightlines_btest sightlines ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+add_test(NAME sightlines_btest COMMAND sightlines_btest)
