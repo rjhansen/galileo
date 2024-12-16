@@ -1,5 +1,5 @@
 set(LIBSIGHTLINES sightlines.c)
-add_library(sightlines)
+add_library(sightlines SHARED)
 target_sources(sightlines
     PUBLIC ${LIBSIGHTLINES}
     PUBLIC FILE_SET HEADERS
