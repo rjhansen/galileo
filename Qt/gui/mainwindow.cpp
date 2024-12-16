@@ -4,20 +4,19 @@
 #include "ui_about.h"
 #include "sightlines.h"
 
+#include <string>
+#include <format>
 #include <algorithm>
-#include <cmath>
-#include <array>
-#include <cstdio>
 #include <QApplication>
 #include <QMainWindow>
 #include <QDoubleSpinBox>
 #include <QDesktopServices>
 #include <QUrl>
 
-using std::array;
-using std::clamp;
-using std::fill;
 using std::make_unique;
+using std::format;
+using std::string;
+using std::clamp;
 
 namespace
 {
@@ -34,7 +33,6 @@ namespace
     constexpr auto LOW_MI = LOW_KM * MI_PER_KM;
     constexpr auto HIGH_KM = 1000.0;
     constexpr auto HIGH_MI = HIGH_KM * MI_PER_KM;
-    constexpr auto EARTH_RADIUS = 6371.0;
 
     const QUrl PROJECT_URL = QUrl { "https://rjhansen.github.io/galileo" };
     const QUrl BUGS_URL = QUrl { "https://github.com/rjhansen/galileo/issues" };
@@ -114,18 +112,18 @@ void MainWindow::kmMiChanged(int new_index)
 
 void MainWindow::updateSightLines(double)
 {
-    char new_message[100] = { 0 };
     const bool IS_ELEV_IN_RADS = (ui->rad_deg->currentIndex() == 0);
     const bool IS_ALTITUDE_IN_KM = (ui->km_mi->currentIndex() == 0);
     const char *DISTANCE_UNITS = IS_ALTITUDE_IN_KM ? "kilometers" : "miles";
-    const auto KM_PER_MI = 1.609344;
-    const auto MI_PER_KM = 1 / 1.609344;
-    const auto RAD_PER_DEG = (2 * PI) / 360;
-    const auto DEG_PER_RAD = 360 / (2 * PI);
     const auto ELEVATION = ui->elevation->value() * (IS_ELEV_IN_RADS ? 1.0 : RAD_PER_DEG);
     const auto ALTITUDE = ui->altitude->value() * (IS_ALTITUDE_IN_KM ? 1.0 : MI_PER_KM);
-    const auto SIGHTLINE = get_sightline(ELEVATION, ALTITUDE, new_message, 100, DISTANCE_UNITS);
+    const auto SIGHTLINE_KM = get_sightline(ELEVATION, ALTITUDE);
+    const auto SIGHTLINE_MI = SIGHTLINE_KM * KM_PER_MI;
+    const auto SIGHTLINE = IS_ALTITUDE_IN_KM ? SIGHTLINE_KM : SIGHTLINE_MI;
+    const string new_message { 
+        format("Sightline is {:.2f} {}", SIGHTLINE, DISTANCE_UNITS) 
+    };
 
     ui->statusBar->clearMessage();
-    ui->statusBar->showMessage(QString(new_message));
+    ui->statusBar->showMessage(QString(new_message.c_str()));
 }
