@@ -46,11 +46,21 @@ set(CMAKE_AUTORCC ON)
 # be using one or the other in production code.  If your dev box doesn't
 # have both available, that's an environment defect: fix it.
 
-find_package(GTest REQUIRED)
 find_package(Boost 1.80 REQUIRED COMPONENTS unit_test_framework)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
 
 add_subdirectory(gui)
 add_subdirectory(sightlines)
 
 target_include_directories(${PROJECT_NAME} PUBLIC sightlines)
 target_link_libraries(${PROJECT_NAME} PUBLIC sightlines Qt6::Widgets)
+
+enable_testing()
+add_executable(sightline_gtest tests/sightline_gtest.cc)
+target_link_libraries(sightline_gtest sightline GTest::gtest_main)
