@@ -2,21 +2,20 @@
 #define MAINWINDOW_H
 
 #include <QApplication>
-#include <QMainWindow>
 #include <QDoubleSpinBox>
-#include <memory>
+#include <QMainWindow>
 #include <algorithm>
+#include <memory>
 
 namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
-   Q_OBJECT
+class MainWindow : public QMainWindow {
+    Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget* parent = 0);
     virtual ~MainWindow();
 
 private:

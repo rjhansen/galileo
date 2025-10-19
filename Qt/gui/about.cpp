@@ -3,9 +3,9 @@
 
 using std::make_unique;
 
-About::About(QWidget *parent) :
-    QDialog { parent },
-    ui { make_unique<Ui::About>() }
+About::About(QWidget* parent)
+    : QDialog { parent }
+    , ui { make_unique<Ui::About>() }
 {
     ui->setupUi(this);
 }
