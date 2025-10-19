@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-double get_sightline(const double, const double);
+long double get_sightline(const double, const double);
 
 #ifdef __cplusplus
 }

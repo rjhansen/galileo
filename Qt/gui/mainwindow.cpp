@@ -4,6 +4,7 @@
 #include "ui_about.h"
 #include "sightlines.h"
 
+#include <print>
 #include <string>
 #include <format>
 #include <algorithm>
@@ -20,18 +21,18 @@ using std::clamp;
 
 namespace
 {
-    constexpr auto PI = 3.141592653589793;
-    constexpr auto RAD_PER_DEG = (2 * PI) / 360;
-    constexpr auto DEG_PER_RAD = 360 / (2 * PI);
-    constexpr auto LOW_DEG = 0.1;
-    constexpr auto HIGH_DEG = 89.9;
+    constexpr auto PI = 3.141592653589793L;
+    constexpr auto RAD_PER_DEG = (2 * PI) / 360.0L;
+    constexpr auto DEG_PER_RAD = 360.0L / (2 * PI);
+    constexpr auto LOW_DEG = 0.1L;
+    constexpr auto HIGH_DEG = 89.9L;
     constexpr auto LOW_RAD = LOW_DEG * RAD_PER_DEG;
     constexpr auto HIGH_RAD = HIGH_DEG * RAD_PER_DEG;
-    constexpr auto KM_PER_MI = 1.609344;
-    constexpr auto MI_PER_KM = 1 / 1.609344;
-    constexpr auto LOW_KM = 100.0;
+    constexpr auto KM_PER_MI = 1.609344L;
+    constexpr auto MI_PER_KM = 1.0L / KM_PER_MI;
+    constexpr auto LOW_KM = 100.0L;
     constexpr auto LOW_MI = LOW_KM * MI_PER_KM;
-    constexpr auto HIGH_KM = 1000.0;
+    constexpr auto HIGH_KM = 1000.0L;
     constexpr auto HIGH_MI = HIGH_KM * MI_PER_KM;
 
     const QUrl PROJECT_URL = QUrl { "https://rjhansen.github.io/galileo" };
@@ -115,14 +116,12 @@ void MainWindow::updateSightLines(double)
     const bool IS_ELEV_IN_RADS = (ui->rad_deg->currentIndex() == 0);
     const bool IS_ALTITUDE_IN_KM = (ui->km_mi->currentIndex() == 0);
     const char *DISTANCE_UNITS = IS_ALTITUDE_IN_KM ? "kilometers" : "miles";
-    const auto ELEVATION = ui->elevation->value() * (IS_ELEV_IN_RADS ? 1.0 : RAD_PER_DEG);
-    const auto ALTITUDE = ui->altitude->value() * (IS_ALTITUDE_IN_KM ? 1.0 : MI_PER_KM);
+    const auto ELEVATION = ui->elevation->value() * (IS_ELEV_IN_RADS ? 1.0L : RAD_PER_DEG);
+    const auto ALTITUDE = ui->altitude->value() * (IS_ALTITUDE_IN_KM ? 1.0L : KM_PER_MI);
     const auto SIGHTLINE_KM = get_sightline(ELEVATION, ALTITUDE);
-    const auto SIGHTLINE_MI = SIGHTLINE_KM * KM_PER_MI;
-    const auto SIGHTLINE = IS_ALTITUDE_IN_KM ? SIGHTLINE_KM : SIGHTLINE_MI;
-    const string new_message { 
-        format("Sightline is {:.2f} {}", SIGHTLINE, DISTANCE_UNITS) 
-    };
+    const auto SIGHTLINE_MI = static_cast<float>(SIGHTLINE_KM * MI_PER_KM);
+    const auto SIGHTLINE = static_cast<float>(IS_ALTITUDE_IN_KM ? SIGHTLINE_KM : SIGHTLINE_MI);
+    const string new_message { format("Sightline is {:.2f} {}", SIGHTLINE, DISTANCE_UNITS) };
 
     ui->statusBar->clearMessage();
     ui->statusBar->showMessage(QString(new_message.c_str()));

@@ -74,6 +74,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC sightlines Qt6::Widgets)
 enable_testing()
 add_executable(sightlines_gtest tests/sightlines_gtest.cpp)
 target_link_libraries(sightlines_gtest sightlines GTest::gtest_main)
+target_include_directories(sightlines_gtest PUBLIC sightlines)
 add_test(NAME sightlines_gtest COMMAND sightlines_gtest)
 
 # add_executable(sightlines_btest tests/sightlines_btest.cpp)
